@@ -1,0 +1,30 @@
+.sidebar {
+    width: 200px; /* Adjust width as necessary */
+    height: 100vh;
+    overflow-y: auto;
+    background-color: #8eb4e6; /* Lighter blue for a soft contrast */
+    color: #2c3e50; /* Dark color for text for readability */
+    padding: 20px;
+  }
+  
+  .sidebar h2 {
+    margin-top: 0;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar li {
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+  }
+  
+  .sidebar li:hover {
+    background-color: #aed0f5; /* Even lighter blue for hover state */
+    color: #2c3e50; /* Maintain dark text for readability */
+  }
+  

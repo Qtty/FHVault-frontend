@@ -1,0 +1,18 @@
+/* src/components/ItemList/ItemList.css */
+
+.itemList {
+    flex-grow: 1; /* Take the remaining space in the content area */
+    padding: 20px;
+    overflow-y: auto; /* Enable scrolling if the content overflows */
+  }
+  
+  .item {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f9f9f9; /* Light background for each item */
+    border: 1px solid #ddd; /* Border for each item */
+    border-radius: 4px;
+  }
+  
+  /* Add hover effect or other styles as needed */
+  

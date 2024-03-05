@@ -1,10 +1,7 @@
 #root {
   box-sizing: border-box;
-  max-width: 90vw;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.read-the-docs {
-  color: #888;
+  width: 100vw; /* Set width to full viewport width */
+  max-width: 100vw; /* Ensure it can grow up to the full viewport width */
+  margin: 0 auto; /* Remove if you want to ensure it's not centered with margins */
+  text-align: center; /* This can remain if you want text center-aligned */
 }

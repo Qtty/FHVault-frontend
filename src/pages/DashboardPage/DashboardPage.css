@@ -1,0 +1,41 @@
+/* DashboardPage.css */
+.dashboardLayout {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* Full width of its container */
+    height: 100vh; /* Full viewport height */
+  }
+  
+  .topBar {
+    display: flex;
+    justify-content: flex-end; /* Align items to the right */
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #28527a; /* Deep blue shade */
+    color: white; /* Ensure text is readable */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .topBar button {
+    padding: 8px 16px;
+    margin-left: 10px; /* Add space between buttons */
+    background-color: white;
+    color: #28527a;
+    border: 2px solid white; /* White border for buttons */
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .topBar button:hover {
+    background-color: #2c3e50; /* Slightly darker blue for button hover state */
+    color: white;
+  }
+  
+  
+  .contentArea {
+    display: flex; /* Allows for a flexible layout with the sidebar */
+    flex-grow: 1; /* Content area takes up the remaining space */
+    overflow: hidden; /* Adjust as necessary for content */
+  }
+  

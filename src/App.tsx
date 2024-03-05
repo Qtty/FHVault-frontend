@@ -1,31 +1,36 @@
-import { useEffect, useState } from 'react';
-import { Devnet } from './components/Devnet';
-import { init } from './fhevmjs';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AppProvider } from './context/AppContext';
+import LandingPage from './pages/LandingPage/LandingPage';
+import DashboardPage from './pages/DashboardPage/DashboardPage';
 import './App.css';
-import { Connect } from './components/Connect';
+import 'bulma/css/bulma.min.css';
+import { createFhevmInstance, init } from './fhevmjs';
 
-function App() {
-  const [isInitialized, setIsInitialized] = useState(false);
-
+const App: React.FC = () => {
   useEffect(() => {
-    init()
-      .then(() => {
-        setIsInitialized(true);
-      })
-      .catch(() => setIsInitialized(false));
+    async function initializeLibrary() {
+      await init();
+      await createFhevmInstance();
+      console.log('fhevm init done');
+    }
+  
+    initializeLibrary();
   }, []);
 
-  if (!isInitialized) return null;
-
   return (
-    <>
-      <h1>fhevmjs</h1>
-      <Connect>{(account, provider) => <Devnet />}</Connect>
-      <p className="read-the-docs">
-        <a href="https://docs.zama.ai/fhevm">See the documentation for more information</a>
-      </p>
-    </>
+    <AppProvider>
+      <Router>
+        <div className="App">
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+            {/* Add more routes as needed */}
+          </Routes>
+        </div>
+      </Router>
+    </AppProvider>
   );
-}
+};
 
 export default App;
