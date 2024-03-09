@@ -47,3 +47,16 @@ export function encryptPassword(generatedPassword: string): Array<Uint8Array> {
 
     return password;
 }
+
+export function decryptPassword(encryptedParts: Array<string>, contractAddress: string): string {
+    let decryptedPassword = "";
+    let instance: FhevmInstance = getInstance();
+    for (const part of encryptedParts) {
+      // Mock decryption and conversion logic - replace with your actual functions
+      const decryptedPart = instance.decrypt(contractAddress, part); // Assuming mockDecrypt is your decryption function
+
+      decryptedPassword += int_to_str(decryptedPart);
+    }
+
+    return decryptedPassword;
+}

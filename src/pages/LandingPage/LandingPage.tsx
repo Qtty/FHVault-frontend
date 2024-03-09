@@ -6,7 +6,7 @@ import { useAppContext, Vault } from '../../context/AppContext';
 
 const LandingPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const { contract, setContract, setVaults } = useAppContext();
+  const { contract, setContract, setVaults, setUserAddress } = useAppContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,6 +23,8 @@ const LandingPage: React.FC = () => {
         const provider = new ethers.BrowserProvider(window.ethereum);
         await provider.send("eth_requestAccounts", []); // Request account access if necessary
         const signer = await provider.getSigner();
+        const signer_address = await signer.address;
+        setUserAddress(signer_address);
         // Instantiate the contract
         const contractInstance = new ethers.Contract(contract.address, contract.abi, signer);
         setContract({ ...contract, instance: contractInstance });

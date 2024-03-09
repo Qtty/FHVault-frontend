@@ -5,7 +5,15 @@ interface Contract {
   address: string;
   abi: any[];
   instance: ethers.Contract | null;
-} 
+}
+
+export interface Item {
+    title: string;
+    description: string;
+    vault: number;
+    // Assuming 'password' is a simplified representation
+    password: string;
+}
 
 export interface Vault {
     id: number;
@@ -17,6 +25,7 @@ interface AppState {
     vaults: Vault[];
     contract: Contract;
     currentVault: Vault;
+    userAddress: string;
     // Add other state slices as needed
 }
   
@@ -24,11 +33,12 @@ interface AppContextType extends AppState {
     setVaults: React.Dispatch<React.SetStateAction<Vault[]>>;
     setContract: React.Dispatch<React.SetStateAction<Contract>>;
     setCurrentVault: React.Dispatch<React.SetStateAction<Vault>>;
+    setUserAddress: React.Dispatch<React.SetStateAction<string>>;
     // Add setters for other state slices as needed
 }
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-const CONTRACT_ADDRESS = "0xb324753D416014e77b2Bd0A5615b187344ef19bf";
+const CONTRACT_ADDRESS = "0x5FB47332da35E7a54782c7b1EE944400fb14fba1";
 const CONTRACT_ABI: any[] = [
 	{
 		"inputs": [
@@ -427,8 +437,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     const [vaults, setVaults] = useState<Vault[]>([]);
     const [contract, setContract] = useState<Contract>({address: CONTRACT_ADDRESS, abi: CONTRACT_ABI, instance: null});
     const [currentVault, setCurrentVault] = useState<Vault>({id: 0, name: "All"});
+    const [userAddress, setUserAddress] = useState<string>('');
 
-    const value = { vaults, setVaults, contract, setContract, currentVault, setCurrentVault };
+    const value = { vaults, setVaults, contract, setContract, currentVault, setCurrentVault, userAddress, setUserAddress };
 
     return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
