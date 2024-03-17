@@ -1,41 +1,40 @@
-/* DashboardPage.css */
+:root {
+  --primary-color: #3498db; /* Soft Blue */
+  --secondary-color: #f1c40f; /* Vibrant Yellow */
+  --background-color: #ecf0f1; /* Light Grayish-Blue */
+  --text-color: #2c3e50; /* Dark Blue-Gray */
+  --secondary-text-color: #95a5a6; /* Light Gray-Blue */
+  --accent-color: #e74c3c; /* Bright Red */
+}
+
 .dashboardLayout {
-    display: flex;
-    flex-direction: column;
-    width: 100%; /* Full width of its container */
-    height: 100vh; /* Full viewport height */
-  }
-  
-  .topBar {
-    display: flex;
-    justify-content: flex-end; /* Align items to the right */
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #28527a; /* Deep blue shade */
-    color: white; /* Ensure text is readable */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .topBar button {
-    padding: 8px 16px;
-    margin-left: 10px; /* Add space between buttons */
-    background-color: white;
-    color: #28527a;
-    border: 2px solid white; /* White border for buttons */
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-  }
-  
-  .topBar button:hover {
-    background-color: #2c3e50; /* Slightly darker blue for button hover state */
-    color: white;
-  }
-  
-  
-  .contentArea {
-    display: flex; /* Allows for a flexible layout with the sidebar */
-    flex-grow: 1; /* Content area takes up the remaining space */
-    overflow: hidden; /* Adjust as necessary for content */
-  }
+  display: flex; /* Aligns Sidebar and Main Content side by side */
+  height: 100vh; /* Sets the full viewport height */
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.mainContent {
+  flex-grow: 1; /* Takes up the remaining space */
+  display: flex;
+  flex-direction: column; /* Aligns Navbar and Content Area vertically */
+}
+
+/* Use a more specific selector if needed */
+.dashboardLayout .navbar {
+  width: 100%;
+  background-color: var(--primary-color);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Keep the rest of your styles as is */
+.button.is-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.button.is-link {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+}
   

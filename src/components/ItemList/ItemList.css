@@ -1,18 +1,25 @@
-/* src/components/ItemList/ItemList.css */
-
 .itemList {
-    flex-grow: 1; /* Take the remaining space in the content area */
-    padding: 20px;
-    overflow-y: auto; /* Enable scrolling if the content overflows */
-  }
-  
-  .item {
-    margin-bottom: 10px;
-    padding: 10px;
-    background-color: #f9f9f9; /* Light background for each item */
-    border: 1px solid #ddd; /* Border for each item */
-    border-radius: 4px;
-  }
-  
-  /* Add hover effect or other styles as needed */
-  
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Ensures content is aligned to the left */
+  padding: 20px;
+  overflow-y: auto; /* Enable scrolling if content overflows */
+}
+
+.item {
+  width: 100%; /* Ensures full width is used */
+  padding: 0; /* Top and bottom padding */
+  border-bottom: 1px solid #e0e0e0; /* Light grey border at the bottom of each item */
+  box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+}
+
+.itemName {
+  font-size: 1.0em; /* Larger title */
+  font-weight: bold;
+  margin-bottom: 4px; /* Space between title and description */
+}
+
+.itemDescription {
+  font-size: 0.6em; /* Smaller description */
+  color: #555; /* Color for the description */
+}

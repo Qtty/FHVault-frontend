@@ -5,6 +5,7 @@ import ItemInfoModal from '../ItemInfoModal/ItemInfoModal'; // Adjust import pat
 interface Item {
   id: number;
   title: string;
+  description: string;
   // Add any other necessary item properties
 }
 
@@ -24,6 +25,7 @@ const ItemList: React.FC = () => {
         const fetchedItems: Item[] = itemIds.map((id: number, index: number) => ({
           id: id, // Converting id to string if necessary
           title: titles[index],
+          description: "test"
         }));
         setItems(fetchedItems);
       } catch (error) {
@@ -39,13 +41,17 @@ const ItemList: React.FC = () => {
   };
 
   return (
+    // Assuming you have 'bulma' installed and its CSS file imported in your project
     <div className="itemList">
       {items.map((item) => (
-        <div key={item.id} onClick={() => handleItemClick(item.id)}>
-          {item.title}
+        <div key={item.id} className="box custom-box-margin" style={{ marginRight: "10px", marginTop: "10px", marginLeft: "10px" }} onClick={() => handleItemClick(item.id)}>
+          <div className="content has-text-left">
+            <p className="title is-5">{item.title}</p>
+            <p className="subtilte is-6">{item.description}</p>
+          </div>
         </div>
       ))}
-      {items.length === 0 && <p>Vault is empty.</p>}
+      {items.length === 0 && <p className="has-text-centered">Vault is empty.</p>}
       {selectedItemId && (
         <ItemInfoModal
           isOpen={!!selectedItemId}

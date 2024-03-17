@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Modal from '../common/Modal';
 import { useAppContext, Vault } from '../../context/AppContext';
+import { toast } from 'bulma-toast';
 
 interface CreateVaultModalProps {
   isOpen: boolean;
@@ -11,8 +12,6 @@ const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) 
   const [title, setTitle] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
-  const [showNotification, setShowNotification] = useState(false);
-  const [notificationMessage, setNotificationMessage] = useState('');
 
   const { contract, setVaults } = useAppContext();
 
@@ -41,12 +40,21 @@ const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) 
 
         setVaults(formattedVaults);
         onClose();
-        setShowNotification(true);
-        setNotificationMessage('Vault created successfully!');
-        // Hide notification after 5 seconds
-        setTimeout(() => setShowNotification(false), 5000);
+        toast({
+          message: 'Vault Created!',
+          type: 'is-success',
+          dismissible: true,
+          position: 'top-center',
+          animate: { in: 'fadeIn', out: 'fadeOut' },
+        });
     } catch (error) {
-        setMessage('Error creating vault. Please try again.');
+      toast({
+        message: 'Error creating vault. Please try again.',
+        type: 'is-success',
+        dismissible: true,
+        position: 'top-center',
+        animate: { in: 'fadeIn', out: 'fadeOut' },
+      });
         console.error('Error creating vault:', error);
     }
     setIsLoading(false);
@@ -54,11 +62,6 @@ const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) 
 
   return (
     <div>
-        {showNotification && (
-            <div className="notification is-success" style={{ position: 'absolute', top: 10, left: '50%', transform: 'translateX(-50%)'}}>
-            {notificationMessage}
-            </div>
-        )}
         <Modal isOpen={isOpen} onClose={onClose}>
         <form onSubmit={handleSubmit}>
             <h2 className="title is-2">Create Vault</h2>

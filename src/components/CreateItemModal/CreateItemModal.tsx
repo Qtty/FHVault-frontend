@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Modal from '../common/Modal'; // Adjust the import path as necessary
 import { useAppContext } from '../../context/AppContext';
 import { generateSecurePassword, encryptPassword } from "../common/Utils";
+import { toast } from 'bulma-toast';
 
 interface CreateItemModalProps {
   isOpen: boolean;
@@ -15,8 +16,6 @@ const CreateItemModal: React.FC<CreateItemModalProps> = ({ isOpen, onClose }) =>
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
-  const [showNotification, setShowNotification] = useState(false);
-  const [notificationMessage, setNotificationMessage] = useState('');
 
   const { contract, setCurrentVault, currentVault, vaults } = useAppContext();
 
@@ -42,24 +41,27 @@ const CreateItemModal: React.FC<CreateItemModalProps> = ({ isOpen, onClose }) =>
 
         setCurrentVault(currentVault); // To force an update of the items list in case the item belongs to the current vault
         onClose();
-        setShowNotification(true);
-        setNotificationMessage('Item created successfully!');
-        // Hide notification after 5 seconds
-        setTimeout(() => setShowNotification(false), 5000);
+        toast({
+            message: 'Item Created Succesfully!',
+            type: 'is-success',
+            dismissible: true,
+            position: 'top-center',
+            animate: { in: 'fadeIn', out: 'fadeOut' },
+          });
     } catch (error) {
-        setMessage('Error creating item. Please try again.');
+        toast({
+            message: 'Error creating item. Please try again.',
+            type: 'is-danger',
+            dismissible: true,
+            position: 'top-center',
+            animate: { in: 'fadeIn', out: 'fadeOut' },
+        });
         console.error('Error creating item:', error);
     }
     setIsLoading(false);
   };
 
   return (
-    <div>
-        {showNotification && (
-            <div className="notification is-success" style={{ position: 'absolute', top: 10, left: '50%', transform: 'translateX(-50%)'}}>
-            {notificationMessage}
-            </div>
-        )}
         <Modal isOpen={isOpen} onClose={onClose}>
         <form onSubmit={handleSubmit}>
             <h2 className="title is-2">Create Item</h2>
@@ -124,7 +126,6 @@ const CreateItemModal: React.FC<CreateItemModalProps> = ({ isOpen, onClose }) =>
             </div>
         </form>
         </Modal>
-    </div>
   );
 };
 

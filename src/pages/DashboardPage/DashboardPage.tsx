@@ -17,23 +17,32 @@ const DashboardPage: React.FC = () => {
 
   return (
     <div className="dashboardLayout">
-        <div className="topBar">
-            <button onClick={() => setCreateItemModalOpen(true)}>Create Item</button>
-            <button onClick={() => setCreateVaultModalOpen(true)}>Create Vault</button>
+        <Sidebar />
+        <div className='mainContent'>
+            <div className="navbar" role="navigation" aria-label="main navigation">
+                <div className="navbar-menu">
+                    <div className="navbar-end">
+                    <div className="navbar-item">
+                        <button className="button is-primary mr-3" onClick={() => setCreateVaultModalOpen(true)}>Create Vault</button> {/* Example create button */}
+                        <button className="button is-link" onClick={() => setCreateItemModalOpen(true)}>Create Item</button> {/* Additional example create button */}
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div className="contentArea">
+                <ItemList />
+            </div>
+            <CreateItemModal
+                isOpen={isCreateItemModalOpen}
+                onClose={() => setCreateItemModalOpen(false)}
+            />
+            <CreateVaultModal
+            isOpen={isCreateVaultModalOpen}
+            onClose={() => setCreateVaultModalOpen(false)}
+            />
         </div>
-        <div className="contentArea">
-            <Sidebar />
-            <ItemList /> 
-        </div>
-        <CreateItemModal
-            isOpen={isCreateItemModalOpen}
-            onClose={() => setCreateItemModalOpen(false)}
-         />
-        <CreateVaultModal
-           isOpen={isCreateVaultModalOpen}
-           onClose={() => setCreateVaultModalOpen(false)}
-        />
     </div>
+
   );
 };
 

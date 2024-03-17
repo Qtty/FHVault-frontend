@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useAppContext, Vault } from '../../context/AppContext'; // Adjust the import path as necessary
 import './Sidebar.css'; // Ensure you have this CSS for styling
+import fhvault from '../../../public/fhvault.png';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -37,13 +38,15 @@ const Sidebar: React.FC = () => {
 
   return (
     <div className="sidebar">
-      <h2>Vaults</h2>
+      <h1 className="sidebar-title">FhVault</h1>
       <ul>
-        {vaults.map((vault) => (
-          <li key={vault.id} onClick={() => setCurrentVault(vault)}>
-            {vault.name}
-          </li>
-        ))}
+      {vaults.map((vault) => (
+        <li key={vault.id} onClick={() => setCurrentVault(vault)}>
+          <img src={fhvault} alt="Logo" className="vault-logo" />
+          {vault.name}
+        </li>
+      ))}
+
       </ul>
     </div>
   );
