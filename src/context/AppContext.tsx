@@ -2,7 +2,7 @@ import { ethers } from 'ethers';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface Contract {
-  address: string;
+  address: string | null;
   abi: any[];
   instance: ethers.Contract | null;
 }
@@ -26,6 +26,7 @@ interface AppState {
     contract: Contract;
     currentVault: Vault;
     userAddress: string;
+	factoryContract: Contract;
     // Add other state slices as needed
 }
   
@@ -34,11 +35,72 @@ interface AppContextType extends AppState {
     setContract: React.Dispatch<React.SetStateAction<Contract>>;
     setCurrentVault: React.Dispatch<React.SetStateAction<Vault>>;
     setUserAddress: React.Dispatch<React.SetStateAction<string>>;
+	setFactoryContract: React.Dispatch<React.SetStateAction<Contract>>;
     // Add setters for other state slices as needed
 }
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-const CONTRACT_ADDRESS = "0x5FB47332da35E7a54782c7b1EE944400fb14fba1";
+const FACTORY_CONTRACT_ADDRESS = "0xE89D8b66747AfD08bd91fBBD72613215375FEd6E";
+const FACTORY_CONTRACT_ABI: any[] = [
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "passwordManagerAddress",
+				"type": "address"
+			}
+		],
+		"name": "PasswordManagerCreated",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "createPasswordManager",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "hasPasswordManager",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "userToPasswordManager",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
 const CONTRACT_ABI: any[] = [
 	{
 		"inputs": [
@@ -435,11 +497,12 @@ const CONTRACT_ABI: any[] = [
 
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [vaults, setVaults] = useState<Vault[]>([]);
-    const [contract, setContract] = useState<Contract>({address: CONTRACT_ADDRESS, abi: CONTRACT_ABI, instance: null});
+    const [contract, setContract] = useState<Contract>({address: "", abi: CONTRACT_ABI, instance: null});
+	const [factoryContract, setFactoryContract] = useState<Contract>({address: FACTORY_CONTRACT_ADDRESS, abi: FACTORY_CONTRACT_ABI, instance: null});
     const [currentVault, setCurrentVault] = useState<Vault>({id: 0, name: "All"});
     const [userAddress, setUserAddress] = useState<string>('');
 
-    const value = { vaults, setVaults, contract, setContract, currentVault, setCurrentVault, userAddress, setUserAddress };
+    const value = { vaults, setVaults, contract, setContract, currentVault, setCurrentVault, userAddress, setUserAddress, factoryContract, setFactoryContract };
 
     return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

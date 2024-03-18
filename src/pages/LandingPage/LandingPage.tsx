@@ -6,7 +6,8 @@ import { useAppContext, Vault } from '../../context/AppContext';
 
 const LandingPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const { contract, setContract, setVaults, setUserAddress } = useAppContext();
+  const [hasInstance, setHasInstance] = useState(false);
+  const { contract, setContract, setVaults, setUserAddress, factoryContract, setFactoryContract } = useAppContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,23 +26,33 @@ const LandingPage: React.FC = () => {
         const signer = await provider.getSigner();
         const signer_address = await signer.address;
         setUserAddress(signer_address);
-        // Instantiate the contract
-        const contractInstance = new ethers.Contract(contract.address, contract.abi, signer);
-        setContract({ ...contract, instance: contractInstance });
 
-        // Call the getVaults method from your contract
-        const [vaultIds, vaultNames] = await contractInstance.getVaults();
-        
-        // Format the vaults combining the ids and names into objects
-        const formattedVaults: Vault[] = vaultIds.map((id: any, index: number) => ({
-          id: id.toString(), // Convert id to string if necessary
-          name: vaultNames[index],
-        }));
+        const factoryContractInstance = new ethers.Contract(factoryContract.address, factoryContract.abi, signer);
+        // Assume `checkForInstance` is the method to check if a user has a password manager instance
+        const contractAddress = await factoryContractInstance.hasPasswordManager();
+        console.log('has instance: ' + contractAddress);
+        const userHasInstance = (contractAddress != "0x0000000000000000000000000000000000000000");
+        setHasInstance(userHasInstance);
+        setFactoryContract({...factoryContract, instance: factoryContractInstance});
 
-        setVaults(formattedVaults);
+        if (userHasInstance) {
+          const contractInstance = new ethers.Contract(contractAddress, contract.abi, signer);
+          setContract({ ...contract, address: contractAddress, instance: contractInstance });
 
-        // After successfully fetching vaults, navigate to the dashboard
-        navigate('/dashboard');
+          // Call the getVaults method from your contract
+          const [vaultIds, vaultNames] = await contractInstance.getVaults();
+          
+          // Format the vaults combining the ids and names into objects
+          const formattedVaults: Vault[] = vaultIds.map((id: any, index: number) => ({
+            id: id.toString(), // Convert id to string if necessary
+            name: vaultNames[index],
+          }));
+
+          setVaults(formattedVaults);
+          navigate('/dashboard');
+        } else {
+          setLoading(false);
+        }
       } catch (error) {
         console.error('An error occurred:', error);
         setLoading(false);
@@ -49,12 +60,30 @@ const LandingPage: React.FC = () => {
     };
 
     init();
-  }, []);
+  }, [contract]);
 
-  // Loading and error feedback
+  const handleCreateInstance = async () => {
+    // Assume `createPasswordManagerInstance` is your method to create a new instance
+    setLoading(true);
+    try {
+      const tx = await factoryContract.instance.createPasswordManager();
+      await tx.wait(); // Wait for the transaction to be mined
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Failed to create a new instance:', error);
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="landingPage">
-      {loading ? 'Loading, please wait...' : 'MetaMask not detected. Please install MetaMask to use this application.'}
+      {loading && 'Loading, please wait...'}
+      {!loading && !hasInstance && (
+        <div>
+          <p>You do not have a Password Manager instance.</p>
+          <button onClick={handleCreateInstance}>Create Instance</button>
+        </div>
+      )}
     </div>
   );
 };
