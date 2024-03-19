@@ -54,6 +54,11 @@ const ItemInfoModal: React.FC<ItemInfoModalProps> = ({ isOpen, onClose, itemId }
     }
     setIsLoading(true);
     try {
+      if (!contract.address) {
+        alert("Initializing error");
+        setIsLoading(false);
+        return;
+      }
       let signature = await getSignature(contract.address, userAddress);
       // Assuming your contract has a method getPassword that accepts an item ID
       const encrypted_password = await contract.instance.getPlainPassword(itemId, signature?.publicKey, signature?.signature);
@@ -66,7 +71,7 @@ const ItemInfoModal: React.FC<ItemInfoModalProps> = ({ isOpen, onClose, itemId }
     setIsLoading(false);
   };
 
-  const handleEditChange = (e) => {
+  const handleEditChange = (e: any) => {
     // Update editableItem state when the user types in the form inputs
     setItem({ ...item, [e.target.name]: e.target.value });
   };
@@ -75,6 +80,12 @@ const ItemInfoModal: React.FC<ItemInfoModalProps> = ({ isOpen, onClose, itemId }
     setIsEditing(false);
     setIsLoading(true);
     try {
+      if (!contract.instance) {
+        alert("Initializing error");
+        setIsLoading(false);
+        onClose();
+        return;
+      }
       // Call your smart contract method to update all the details at once
       const tx = await contract.instance.setItem(itemId, item.title, item.description, item.vault, encryptPassword(item.password));
       await tx.wait();

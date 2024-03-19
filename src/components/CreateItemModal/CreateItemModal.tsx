@@ -93,7 +93,7 @@ const CreateItemModal: React.FC<CreateItemModalProps> = ({ isOpen, onClose }) =>
             <label className="label">Vault</label>
             <div className="control">
                 <div className="select">
-                <select value={vault} onChange={(e) => setVault(e.target.value)}>
+                <select value={vault} onChange={(e) => setVault(Number(e.target.value) || 0)}>
                     <option value="">Select Vault</option>
                     {vaults.map((vaultItem) => (
                     <option key={vaultItem.id} value={vaultItem.id}>

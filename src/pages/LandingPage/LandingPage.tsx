@@ -27,6 +27,11 @@ const LandingPage: React.FC = () => {
         const signer_address = await signer.address;
         setUserAddress(signer_address);
 
+        if (!factoryContract.address) {
+          alert("factoryContract not instanciated, failing");
+          setLoading(false);
+          return;
+        }
         const factoryContractInstance = new ethers.Contract(factoryContract.address, factoryContract.abi, signer);
         // Assume `checkForInstance` is the method to check if a user has a password manager instance
         const contractAddress = await factoryContractInstance.hasPasswordManager();
@@ -65,6 +70,11 @@ const LandingPage: React.FC = () => {
   const handleCreateInstance = async () => {
     // Assume `createPasswordManagerInstance` is your method to create a new instance
     setLoading(true);
+    if (!factoryContract.instance) {
+      alert("Initializing error");
+      setLoading(false);
+      return;
+    }
     try {
       const tx = await factoryContract.instance.createPasswordManager();
       await tx.wait(); // Wait for the transaction to be mined

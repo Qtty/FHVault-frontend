@@ -40,7 +40,7 @@ interface AppContextType extends AppState {
 }
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-const FACTORY_CONTRACT_ADDRESS = "0xE89D8b66747AfD08bd91fBBD72613215375FEd6E";
+const FACTORY_CONTRACT_ADDRESS = "0x5b7c3Dae7c0fbd93C66cEAf83E21547589Ba4De9";
 const FACTORY_CONTRACT_ABI: any[] = [
 	{
 		"anonymous": false,
