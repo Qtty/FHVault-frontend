@@ -9,8 +9,8 @@
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "start": "serve -s dist -l tcp://0.0.0.0:$PORT -n",
-    "predeploy" : "npm run build",
-    "deploy" : "gh-pages -d dist"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@types/react-router": "^5.1.20",
@@ -36,6 +36,7 @@
     "eslint-plugin-react-refresh": "^0.4.1",
     "fhevmjs": "^0.3.1",
     "gh-pages": "^6.1.1",
+    "serve": "^14.2.1",
     "typescript": "^5.3.3",
     "vite": "^5.0.4"
   }

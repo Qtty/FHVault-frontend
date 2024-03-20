@@ -4,9 +4,12 @@ import { ethers } from 'ethers';
 import './LandingPage.css'; // Ensure you have this CSS file for styling
 import { useAppContext, Vault } from '../../context/AppContext';
 
+const AUTHORIZED_CHAIN_ID = ['0x1f49', '0x1f4a', '0x1f4b', '0x2328'];
+
 const LandingPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [hasInstance, setHasInstance] = useState(false);
+  const [isValidNetwork, setIsValidNetwork] = useState(false);
   const { contract, setContract, setVaults, setUserAddress, factoryContract, setFactoryContract } = useAppContext();
   const navigate = useNavigate();
 
@@ -19,6 +22,12 @@ const LandingPage: React.FC = () => {
         return;
       }
 
+      const isValidNetwork = await hasValidNetwork();
+      if (!isValidNetwork) {
+        setLoading(false);
+        return;
+      }
+      setIsValidNetwork(true);
       try {
         // Create an instance of ethers provider
         const provider = new ethers.BrowserProvider(window.ethereum);
@@ -65,7 +74,44 @@ const LandingPage: React.FC = () => {
     };
 
     init();
-  }, [contract]);
+  }, [contract, isValidNetwork]);
+
+  const hasValidNetwork = async (): Promise<boolean> => {
+    const currentChainId: string = await window.ethereum.request({ method: 'eth_chainId' });
+    return AUTHORIZED_CHAIN_ID.includes(currentChainId.toLowerCase());
+  };
+
+  const switchNetwork = async () => {
+    try {
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: AUTHORIZED_CHAIN_ID[0] }],
+      });
+    } catch (e) {
+      await window.ethereum.request({
+        method: 'wallet_addEthereumChain',
+        params: [
+          {
+            chainId: AUTHORIZED_CHAIN_ID[0],
+            rpcUrls: ['https://devnet.zama.ai/'],
+            chainName: 'Zama Devnet',
+            nativeCurrency: {
+              name: 'ZAMA',
+              symbol: 'ZAMA',
+              decimals: 18,
+            },
+            blockExplorerUrls: ['https://main.explorer.zama.ai'],
+          },
+        ],
+      });
+    }
+
+    if (await hasValidNetwork()) {
+      setIsValidNetwork(true);
+    } else {
+      setIsValidNetwork(false);
+    }
+  };
 
   const handleCreateInstance = async () => {
     // Assume `createPasswordManagerInstance` is your method to create a new instance
@@ -88,10 +134,20 @@ const LandingPage: React.FC = () => {
   return (
     <div className="landingPage">
       {loading && 'Loading, please wait...'}
-      {!loading && !hasInstance && (
+      {!loading && !hasInstance && isValidNetwork && (
         <div>
           <p>You do not have a Password Manager instance.</p>
           <button onClick={handleCreateInstance}>Create Instance</button>
+        </div>
+      )}
+      {!loading && !isValidNetwork && (
+        <div>
+          <p>You're not on the correct network</p>
+          <p>
+            <button className="Connect__button" onClick={switchNetwork}>
+              Switch to Zama Devnet
+            </button>
+          </p>
         </div>
       )}
     </div>
